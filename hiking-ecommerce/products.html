@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products - Hiking Gear Shop</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .products-container {
+            padding: 2rem 5%;
+        }
+        
+        .products-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-section {
+            padding: 1rem;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+            margin-bottom: 2rem;
+        }
+        
+        .filter-options {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 1rem;
+        }
+        
+        .filter-options button {
+            background-color: white;
+            border: 1px solid #ddd;
+            padding: 8px 15px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        
+        .filter-options button.active {
+            background-color: #3498db;
+            color: white;
+            border-color: #3498db;
+        }
+        
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sort-options select {
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ddd;
+        }
+        
+        .product-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .product-item {
+            background-color: white;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .product-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        }
+        
+        .product-item img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+        }
+        
+        .product-details {
+            padding: 15px;
+        }
+        
+        .product-details h3 {
+            margin-bottom: 10px;
+        }
+        
+        .price {
+            color: #3498db;
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+        
+        .product-controls {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+        
+        .product-controls button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+        
+        .product-controls button:first-child {
+            background-color: #3498db;
+            color: white;
+            flex-grow: 1;
+            margin-right: 10px;
+        }
+        
+        .product-controls button:first-child:hover {
+            background-color: #2980b9;
+        }
+        
+        .wishlist-btn {
+            background-color: transparent;
+            border: 1px solid #e74c3c;
+            color: #e74c3c;
+        }
+        
+        .wishlist-btn:hover {
+            background-color: #e74c3c;
+            color: white;
+        }
+        
+        .no-results {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 50px;
+            font-size: 1.2rem;
+            color: #777;
+        }
+        
+        .out-of-stock {
+            position: relative;
+        }
+        
+        .out-of-stock::before {
+            content: 'Out of Stock';
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: rgba(231, 76, 60, 0.9);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 3px;
+            font-size: 0.8rem;
+            z-index: 1;
+        }
+        
+        .out-of-stock img {
+            opacity: 0.7;
+        }
+        
+        .out-of-stock .product-controls button:first-child {
+            background-color: #95a5a6;
+            cursor: not-allowed;
+        }
+
+        /* Login/Register Modal Styles */
+        .auth-modal {
+            display: none;
+            position: fixed;
+            z-index: 1001;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
+        }
+        
+        .auth-modal-content {
+            background-color: white;
+            margin: 10% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.3);
+        }
+        
+        .auth-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 10px;
+        }
+        
+        .auth-tabs {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .auth-tab {
+            padding: 10px 20px;
+            margin-right: 10px;
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+        }
+        
+        .auth-tab.active {
+            border-bottom: 2px solid #3498db;
+            font-weight: bold;
+        }
+        
+        .auth-form {
+            display: none;
+        }
+        
+        .auth-form.active {
+            display: block;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .auth-buttons {
+            margin-top: 20px;
+        }
+        
+        .auth-btn {
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            width: 100%;
+        }
+        
+        .auth-btn:hover {
+            background-color: #2980b9;
+        }
+        
+        .checkout-options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        
+        .discount-badge {
+            background-color: #e74c3c;
+            color: white;
+            padding: 2px 10px;
+            border-radius: 20px;
+            margin-left: 10px;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        .original-price {
+            text-decoration: line-through;
+            color: #95a5a6;
+            margin-right: 10px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Hiking Gear Shop</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html" class="active">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="cart-icon">
+            <button id="cart-button">🛒</button>
+            <span id="cart-counter">0</span>
+        </div>
+    </header>
+
+    <main class="products-container">
+        <div class="products-header">
+            <h1>All Products</h1>
+            <div class="sort-options">
+                <label for="sort-select">Sort by:</label>
+                <select id="sort-select" onchange="sortProducts(this.value)">
+                    <option value="default">Featured</option>
+                    <option value="price-low">Price: Low to High</option>
+                    <option value="price-high">Price: High to Low</option>
+                    <option value="name-az">Name: A to Z</option>
+                    <option value="name-za">Name: Z to A</option>
+                </select>
+            </div>
+        </div>
+
+        <div class="filter-section">
+            <h3>Filter by Category</h3>
+            <div class="filter-options">
+                <button onclick="filterProducts('all', event)" class="active">All Categories</button>
+                <button onclick="filterProducts('footwear', event)">Footwear</button>
+                <button onclick="filterProducts('gear', event)">Gear</button>
+                <button onclick="filterProducts('shelter', event)">Shelter</button>
+                <button onclick="filterProducts('safety', event)">Safety</button>
+            </div>
+        </div>
+
+        <div class="product-list" id="product-list">
+
+        </div>
+    </main>
+
+
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Your Cart</h2>
+                <button onclick="closeCart()" class="close-btn">&times;</button>
+            </div>
+            <div id="cart-items">
+             
+            </div>
+            <div class="cart-summary">
+                <div class="total">
+                    <span>Total:</span>
+                    <span id="cart-total">$0</span>
+                </div>
+                <button onclick="proceedToCheckout()" class="checkout-btn">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Login/Registration Modal -->
+    <div id="auth-modal" class="auth-modal">
+        <div class="auth-modal-content">
+            <div class="auth-header">
+                <h2>Checkout Options</h2>
+                <button onclick="closeAuthModal()" class="close-btn">&times;</button>
+            </div>
+            
+            <div class="discount-info">
+                <p><strong>Sign up or log in to get 15% off your order!</strong></p>
+            </div>
+            
+            <div class="auth-tabs">
+                <div class="auth-tab active" onclick="switchTab('login')">Login</div>
+                <div class="auth-tab" onclick="switchTab('register')">Register</div>
+            </div>
+            
+            <div id="login-form" class="auth-form active">
+                <div class="form-group">
+                    <label for="login-email">Email</label>
+                    <input type="email" id="login-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="login-password">Password</label>
+                    <input type="password" id="login-password" required>
+                </div>
+                <div class="auth-buttons">
+                    <button class="auth-btn" onclick="login()">Login & Get 15% Off</button>
+                </div>
+            </div>
+            
+            <div id="register-form" class="auth-form">
+                <div class="form-group">
+                    <label for="register-name">Full Name</label>
+                    <input type="text" id="register-name" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-email">Email</label>
+                    <input type="email" id="register-email" required>
+                </div>
+                <div class="form-group">
+                    <label for="register-password">Password</label>
+                    <input type="password" id="register-password" required>
+                </div>
+                <div class="auth-buttons">
+                    <button class="auth-btn" onclick="register()">Sign Up & Get 15% Off</button>
+                </div>
+            </div>
+            
+            <div class="checkout-options">
+                <button class="checkout-btn" onclick="guestCheckout()">Continue as Guest</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Hiking Gear Shop. All rights reserved.</p>
+    </footer>
+
+    <script src="js/products.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        let currentCategory = 'all';
+        let currentSort = 'default';
+        
+        document.addEventListener('DOMContentLoaded', function() {
+    
+            if (typeof products === 'undefined') {
+                console.error('Products data not loaded. Check products.js file.');
+                document.getElementById('product-list').innerHTML = '<div class="no-results">Error loading products. Please try again later.</div>';
+                return;
+            }
+            
+            const selectedCategory = sessionStorage.getItem('selectedCategory');
+            if (selectedCategory) {
+                filterProducts(selectedCategory);
+                
+       
+                document.querySelectorAll('.filter-options button').forEach(btn => {
+                    btn.classList.remove('active');
+                    if (btn.textContent.toLowerCase() === selectedCategory) {
+                        btn.classList.add('active');
+                    }
+                });
+                
+               
+                sessionStorage.removeItem('selectedCategory');
+            } else {
+       
+                displayProducts(products);
+            }
+
+            
+            const savedUser = localStorage.getItem('currentUser');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                updateLoginStatus();
+            }
+        });
+        
+        function filterProducts(category, event) {
+            currentCategory = category;
+            
+   
+            document.querySelectorAll('.filter-options button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+  
+            if (event) {
+                event.target.classList.add('active');
+            } else {
+                document.querySelectorAll('.filter-options button').forEach(btn => {
+                    if (btn.textContent.toLowerCase().includes(category)) {
+                        btn.classList.add('active');
+                    }
+                });
+            }
+            
+        
+            let filteredProducts;
+            if (category === 'all') {
+                filteredProducts = [...products];
+            } else {
+                filteredProducts = products.filter(product => product.category === category);
+            }
+            
+            sortProductsList(filteredProducts, currentSort);
+        }
+        
+        function sortProducts(sortBy) {
+            currentSort = sortBy;
+            
+        
+            let filteredProducts;
+            if (currentCategory === 'all') {
+                filteredProducts = [...products];
+            } else {
+                filteredProducts = products.filter(product => product.category === currentCategory);
+            }
+            
+          
+            sortProductsList(filteredProducts, sortBy);
+        }
+        
+        function sortProductsList(productsList, sortBy) {
+            let sortedProducts = [...productsList];
+            
+            switch (sortBy) {
+                case 'price-low':
+                    sortedProducts.sort((a, b) => a.price - b.price);
+                    break;
+                case 'price-high':
+                    sortedProducts.sort((a, b) => b.price - a.price);
+                    break;
+                case 'name-az':
+                    sortedProducts.sort((a, b) => a.name.localeCompare(b.name));
+                    break;
+                case 'name-za':
+                    sortedProducts.sort((a, b) => b.name.localeCompare(a.name));
+                    break;
+                default:
+            
+                    sortedProducts.sort((a, b) => {
+                        if (a.isFeatured && !b.isFeatured) return -1;
+                        if (!a.isFeatured && b.isFeatured) return 1;
+                        return 0;
+                    });
+            }
+            
+            displayProducts(sortedProducts);
+        }
+        
+        function displayProducts(productsList) {
+            const container = document.getElementById('product-list');
+            container.innerHTML = '';
+            
+            if (productsList.length === 0) {
+                container.innerHTML = '<div class="no-results">No products found in this category.</div>';
+                return;
+            }
+            
+            productsList.forEach(product => {
+                const productItem = document.createElement('div');
+                productItem.classList.add('product-item');
+                
+                if (!product.inStock) {
+                    productItem.classList.add('out-of-stock');
+                }
+                
+                productItem.innerHTML = `
+                    <img src="${product.image}" alt="${product.name}" onerror="this.src='images/product-placeholder.jpg'">
+                    <div class="product-details">
+                        <h3>${product.name}</h3>
+                        <p class="price">$${product.price.toFixed(2)}</p>
+                        <p class="description">${product.description}</p>
+                        <div class="product-controls">
+                            <button onclick="${product.inStock ? 'addToCart(' + product.id + ')' : 'void(0)'}" 
+                                    ${!product.inStock ? 'disabled' : ''}>
+                                ${product.inStock ? 'Add to Cart' : 'Out of Stock'}
+                            </button>
+                            <button onclick="addToWishlist(${product.id})" class="wishlist-btn">❤</button>
+                        </div>
+                    </div>
+                `;
+                container.appendChild(productItem);
+            });
+        }
+
+        // User authentication variables
+        let currentUser = null;
+        
+        // Auth Modal Functions
+        function openAuthModal() {
+            document.getElementById('auth-modal').style.display = 'block';
+            closeCart();
+        }
+        
+        function closeAuthModal() {
+            document.getElementById('auth-modal').style.display = 'none';
+        }
+        
+        function switchTab(tab) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.querySelectorAll('.auth-form').forEach(f => f.classList.remove('active'));
+            
+            if (tab === 'login') {
+                document.querySelector('.auth-tab:first-child').classList.add('active');
+                document.getElementById('login-form').classList.add('active');
+            } else {
+                document.querySelector('.auth-tab:last-child').classList.add('active');
+                document.getElementById('register-form').classList.add('active');
+            }
+        }
+        
+        function login() {
+            const email = document.getElementById('login-email').value;
+            const password = document.getElementById('login-password').value;
+            
+            if (!email || !password) {
+                alert('Please fill in all fields!');
+                return;
+            }
+            
+            // Simulating login - in a real app, this would validate against a database
+            currentUser = {
+                email: email,
+                name: email.split('@')[0] // Simple name extraction from email
+            };
+            
+            // Save to localStorage
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            updateLoginStatus();
+            closeAuthModal();
+            completeCheckout(true);
+        }
+        
+        function register() {
+            const name = document.getElementById('register-name').value;
+            const email = document.getElementById('register-email').value;
+            const password = document.getElementById('register-password').value;
+            
+            if (!name || !email || !password) {
+                alert('Please fill in all fields!');
+                return;
+            }
+            
+            // Simulating registration - in a real app, this would save to a database
+            currentUser = {
+                name: name,
+                email: email
+            };
+            
+            // Save to localStorage
+            localStorage.setItem('currentUser', JSON.stringify(currentUser));
+            
+            updateLoginStatus();
+            closeAuthModal();
+            completeCheckout(true);
+        }
+        
+        function updateLoginStatus() {
+            // This could update UI elements showing the logged-in user
+            console.log('User logged in:', currentUser);
+        }
+        
+        function logout() {
+            currentUser = null;
+            localStorage.removeItem('currentUser');
+            updateLoginStatus();
+        }
+        
+        // Checkout Functions
+        function proceedToCheckout() {
+            if (currentUser) {
+                // User is already logged in
+                completeCheckout(true);
+            } else {
+                // Show auth modal
+                openAuthModal();
+            }
+        }
+        
+        function guestCheckout() {
+            completeCheckout(false);
+            closeAuthModal();
+        }
+        
+        function completeCheckout(applyDiscount) {
+            // Get cart items
+            const cart = getCartItems();
+            
+            if (cart.length === 0) {
+                alert('Your cart is empty!');
+                return;
+            }
+            
+            // Calculate total
+            let total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            // Apply discount if logged in
+            if (applyDiscount) {
+                const discountAmount = total * 0.15; // 15% discount
+                total = total - discountAmount;
+                
+                alert(`Thank you for your order! Your 15% discount has been applied.\nOriginal Total: $${(total + discountAmount).toFixed(2)}\nDiscount: $${discountAmount.toFixed(2)}\nFinal Total: $${total.toFixed(2)}`);
+            } else {
+                alert(`Thank you for your order! Total: $${total.toFixed(2)}`);
+            }
+            
+            // Clear cart
+            localStorage.removeItem('cart');
+            updateCartCount();
+            closeCart();
+            
+            // In a real app, you would redirect to a payment page or process payment here
+        }
+        
+        function getCartItems() {
+            const cartItems = localStorage.getItem('cart');
+            return cartItems ? JSON.parse(cartItems) : [];
+        }
+        
+        function addToCart(productId) {
+            const productToAdd = products.find(p => p.id === productId);
+            if (!productToAdd || !productToAdd.inStock) return;
+            
+            let cart = getCartItems();
+            
+            // Check if product already in cart
+            const existingProduct = cart.find(item => item.id === productId);
+            if (existingProduct) {
+                existingProduct.quantity += 1;
+            } else {
+                cart.push({
+                    id: productToAdd.id,
+                    name: productToAdd.name,
+                    price: productToAdd.price,
+                    image: productToAdd.image,
+                    quantity: 1
+                });
+            }
+            
+            localStorage.setItem('cart', JSON.stringify(cart));
+            updateCartCount();
+            
+            // Optional: Show a confirmation message
+            alert(`${productToAdd.name} added to cart!`);
+        }
+        
+        function addToWishlist(productId) {
+            // Wishlist functionality would be implemented here
+            alert('Wishlist feature coming soon!');
+        }
+        
+        function updateCartCount() {
+            const cart = getCartItems();
+            const count = cart.reduce((sum, item) => sum + item.quantity, 0);
+            document.getElementById('cart-counter').textContent = count;
+        }
+        
+        function openCart() {
+            const cartModal = document.getElementById('cart-modal');
+            const cartItemsContainer = document.getElementById('cart-items');
+            const cartTotalElement = document.getElementById('cart-total');
+            
+            // Clear previous items
+            cartItemsContainer.innerHTML = '';
+            
+            // Get cart items
+            const cart = getCartItems();
+            
+            if (cart.length === 0) {
+                cartItemsContainer.innerHTML = '<p>Your cart is empty</p>';
+                cartTotalElement.textContent = '$0.00';
+            } else {
+                let total = 0;
+                
+                // Add each item to the cart modal
+                cart.forEach(item => {
+                    const itemTotal = item.price * item.quantity;
+                    total += itemTotal;
+                    
+                    const cartItemElement = document.createElement('div');
+                    cartItemElement.classList.add('cart-item');
+                    cartItemElement.innerHTML = `
+                        <div class="cart-item-details">
+                            <h4>${item.name}</h4>
+                            <p>$${item.price.toFixed(2)} x ${item.quantity}</p>
+                        </div>
+                        <div class="cart-item-total">$${itemTotal.toFixed(2)}</div>
+                    `;
+                    
+                    cartItemsContainer.appendChild(cartItemElement);
+                });
+                
+                // Show potential discount if not logged in
+                if (!currentUser) {
+                    const discountElement = document.createElement('div');
+                    discountElement.classList.add('potential-discount');
+                    discountElement.innerHTML = `
+                        <p><strong>Sign in to get 15% off!</strong> 
+                        <span class="discount-badge">Save $${(total * 0.15).toFixed(2)}</span></p>
+                    `;
+                    cartItemsContainer.appendChild(discountElement);
+                } else {
+                    // Show discount for logged in users
+                    const originalTotal = total;
+                    const discountAmount = total * 0.15;
+                    total = total - discountAmount;
+                    
+                    const discountElement = document.createElement('div');
+                    discountElement.classList.add('applied-discount');
+                    discountElement.innerHTML = `
+                        <p><strong>15% Member Discount Applied!</strong></p>
+                        <p>Original Total: <span class="original-price">$${originalTotal.toFixed(2)}</span></p>
+                        <p>You Save: <span class="discount-badge">$${discountAmount.toFixed(2)}</span></p>
+                    `;
+                    cartItemsContainer.appendChild(discountElement);
+                }
+                
+                cartTotalElement.textContent = `$${total.toFixed(2)}`;
+            }
+            
+            cartModal.style.display = 'block';
+        }
+        
+        function closeCart() {
+            document.getElementById('cart-modal').style.display = 'none';
+        }
+        
+        // Add event listener for cart button
+        document.getElementById('cart-button').addEventListener('click', openCart);
+        
+        // Update cart count on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            updateCartCount();
+        });
+    </script>
+</body>
+</html>

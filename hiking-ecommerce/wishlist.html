@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Wishlist - Hiking Gear Shop</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .wishlist-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .wishlist-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .wishlist-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        
+        .wishlist-item {
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            padding: 15px;
+            background-color: white;
+            position: relative;
+        }
+        
+        .wishlist-item img {
+            width: 100%;
+            height: auto;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .wishlist-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .wishlist-remove {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            font-size: 1.2em;
+            cursor: pointer;
+            color: #e74c3c;
+        }
+        
+        .empty-wishlist {
+            text-align: center;
+            padding: 50px 0;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Hiking Gear Shop</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="cart-icon">
+            <button id="cart-button">🛒</button>
+            <span id="cart-counter">0</span>
+        </div>
+    </header>
+
+    <main>
+        <div class="wishlist-container">
+            <div class="wishlist-header">
+                <h1>Your Wishlist</h1>
+                <a href="products.html" class="btn">Continue Shopping</a>
+            </div>
+            
+            <div id="wishlist-content">
+                <div id="wishlist-items" class="wishlist-grid">
+                  
+                </div>
+            </div>
+            
+            <div id="empty-wishlist" class="empty-wishlist" style="display: none;">
+                <h2>Your wishlist is empty</h2>
+                <p>Save items you like for later by clicking the heart button on product pages.</p>
+                <a href="products.html" class="submit-btn">Browse Products</a>
+            </div>
+        </div>
+    </main>
+
+
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Your Cart</h2>
+                <button onclick="closeCart()" class="close-btn">&times;</button>
+            </div>
+            <div id="cart-items">
+             
+            </div>
+            <div class="cart-summary">
+                <div class="total">
+                    <span>Total:</span>
+                    <span id="cart-total">$0</span>
+                </div>
+                <button onclick="proceedToCheckout()" class="checkout-btn">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Hiking Gear Shop. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/wishlist.js"></script>
+</body>
+</html>

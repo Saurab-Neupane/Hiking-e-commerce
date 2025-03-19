@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation - Hiking Gear Shop</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .confirmation-container {
+            max-width: 800px;
+            margin: 3rem auto;
+            padding: 2rem;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .confirmation-icon {
+            font-size: 5rem;
+            color: #4CAF50;
+            margin-bottom: 1rem;
+        }
+        
+        .confirmation-message {
+            margin-bottom: 2rem;
+        }
+        
+        .confirmation-details {
+            background-color: white;
+            padding: 1.5rem;
+            border-radius: 5px;
+            margin-bottom: 2rem;
+            text-align: left;
+        }
+        
+        .order-number {
+            font-weight: bold;
+            font-size: 1.2rem;
+            margin-bottom: 1rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+        }
+        
+        .action-button {
+            display: inline-block;
+            padding: 10px 20px;
+            background-color: #3498db;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+        
+        .action-button:hover {
+            background-color: #2980b9;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Hiking Gear Shop</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <div class="confirmation-container">
+            <div class="confirmation-icon">✓</div>
+            <div class="confirmation-message">
+                <h1>Order Confirmed!</h1>
+                <p>Thank you for your purchase. Your order has been received and is being processed.</p>
+            </div>
+            
+            <div class="confirmation-details">
+                <div class="order-number">Order #: <span id="order-id"></span></div>
+                <p>A confirmation email has been sent to your email address.</p>
+                <p>Expected delivery: <span id="delivery-date"></span></p>
+            </div>
+            
+            <div class="action-buttons">
+                <a href="index.html" class="action-button">Continue Shopping</a>
+                <a href="#" class="action-button" id="track-order-btn">Track Order</a>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 Hiking Gear Shop. All rights reserved.</p>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generate random order number
+            const orderId = 'ORD-' + Math.floor(100000 + Math.random() * 900000);
+            document.getElementById('order-id').textContent = orderId;
+            
+            // Calculate estimated delivery date (7-10 days from now)
+            const today = new Date();
+            const deliveryDays = Math.floor(7 + Math.random() * 4); // 7-10 days
+            const deliveryDate = new Date(today);
+            deliveryDate.setDate(today.getDate() + deliveryDays);
+            
+            const options = { year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('delivery-date').textContent = deliveryDate.toLocaleDateString('en-US', options);
+            
+            // Track order button functionality
+            document.getElementById('track-order-btn').addEventListener('click', function(e) {
+                e.preventDefault();
+                alert('Order tracking will be available soon. Please check your email for updates.');
+            });
+        });
+    </script>
+</body>
+</html>

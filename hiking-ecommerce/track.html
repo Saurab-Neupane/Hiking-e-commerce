@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Track Your Order - Hiking Gear Shop</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .tracking-container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .tracking-form {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+        }
+        
+        .tracking-form input {
+            flex: 1;
+        }
+        
+        .tracking-details {
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .tracking-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .tracking-info {
+            flex: 2;
+        }
+        
+        .tracking-status {
+            flex: 1;
+            text-align: right;
+        }
+        
+        .status-label {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-weight: bold;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+        
+        .status-processing {
+            background-color: #f39c12;
+            color: white;
+        }
+
+        .status-shipped {
+            background-color: #3498db;
+            color: white;
+        }
+
+        .status-delivered {
+            background-color: #2ecc71;
+            color: white;
+        }
+        
+        .shipment-info {
+            margin: 20px 0;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+        
+        .status-timeline {
+            margin: 20px 0;
+        }
+        
+        .timeline-item {
+            display: flex;
+            margin-bottom: 20px;
+            position: relative;
+        }
+        
+        .timeline-item:before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 30px;
+            height: calc(100% + 10px);
+            width: 2px;
+            background-color: #ddd;
+        }
+        
+        .timeline-item:last-child:before {
+            display: none;
+        }
+        
+        .timeline-marker {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            background-color: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 15px;
+            z-index: 1;
+        }
+        
+        .timeline-content {
+            flex: 1;
+        }
+        
+        .timeline-date {
+            color: #777;
+            font-size: 0.9em;
+            margin-bottom: 5px;
+        }
+
+        .map-container {
+            height: 300px;
+            background-color: #eee;
+            border-radius: 5px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #777;
+        }
+        
+        .no-tracking-info {
+            text-align: center;
+            padding: 50px 0;
+            color: #777;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Hiking Gear Shop</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="cart-icon">
+            <button id="cart-button">🛒</button>
+            <span id="cart-counter">0</span>
+        </div>
+    </header>
+
+    <main>
+        <div class="tracking-container">
+            <h1>Track Your Order</h1>
+            <p>Enter your order number to track your shipment.</p>
+            
+            <form class="tracking-form">
+                <input type="text" id="order-number" placeholder="Order Number (e.g., ORD-12345678)" required>
+                <button type="submit" class="submit-btn">Track</button>
+            </form>
+            
+            <div class="tracking-details" id="tracking-details">
+                <div class="tracking-header">
+                    <div class="tracking-info">
+                        <h2>Order #<span id="display-order-number"></span></h2>
+                        <p>Placed on <span id="order-date"></span></p>
+                        <p>Estimated delivery: <span id="estimated-delivery"></span></p>
+                    </div>
+                    <div class="tracking-status">
+                        <div id="status-label" class="status-label status-processing">Processing</div>
+                        <p>Last Updated: <span id="last-updated"></span></p>
+                    </div>
+                </div>
+                
+                <div class="map-container" id="tracking-map">
+                    Live package location map will appear here when shipment is in transit
+                </div>
+                
+                <div class="shipment-info">
+                    <h3>Shipment Information</h3>
+                    <div class="shipment-details">
+                        <p><strong>Delivery Address:</strong> <span id="delivery-address"></span></p>
+                        <p><strong>Shipping Method:</strong> <span id="shipping-method"></span></p>
+                        <p><strong>Carrier:</strong> <span id="carrier-name">FedEx</span></p>
+                        <p><strong>Tracking Number:</strong> <span id="tracking-number">---</span></p>
+                    </div>
+                </div>
+                
+                <div class="status-timeline">
+                    <h3>Status Updates</h3>
+                    <div id="timeline-container">
+                       
+                    </div>
+                </div>
+                
+                <div class="order-items">
+                    <h3>Items in this order</h3>
+                    <div id="order-items-list">
+                     
+                    </div>
+                </div>
+            </div>
+            
+            <div id="no-tracking-info" class="no-tracking-info">
+                <p>Please enter your order number to view tracking information.</p>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Hiking Gear Shop. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+    <script src="js/track.js"></script>
+</body>
+</html>

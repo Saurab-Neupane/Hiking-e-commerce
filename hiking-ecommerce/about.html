@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About Us - Hiking Gear Shop</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .about-section {
+            max-width: 800px;
+            margin: 0 auto 2rem;
+            line-height: 1.8;
+        }
+        
+        .about-section h1 {
+            margin-bottom: 1.5rem;
+        }
+        
+        .about-section p {
+            margin-bottom: 1rem;
+        }
+        
+        .team-section {
+            background-color: #f8f9fa;
+            padding: 3rem 5%;
+            margin-bottom: 2rem;
+        }
+        
+        .team-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .team-member {
+            background: white;
+            border-radius: 5px;
+            overflow: hidden;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .team-member img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+        }
+        
+        .team-info {
+            padding: 1.5rem;
+        }
+        
+        .team-info h3 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .team-info p {
+            color: #666;
+            margin-bottom: 1rem;
+        }
+        
+        .values-section {
+            max-width: 1200px;
+            margin: 0 auto 3rem;
+        }
+        
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+        
+        .value-card {
+            padding: 2rem;
+            border-radius: 5px;
+            background: white;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+        
+        .value-card i {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: #3498db;
+        }
+        
+        .value-card h3 {
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Hiking Gear Shop</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="cart-icon">
+            <button id="cart-button">🛒</button>
+            <span id="cart-counter">0</span>
+        </div>
+    </header>
+
+    <main>
+        <section class="container about-section">
+            <h1>About Hiking Gear Shop</h1>
+            <p>Founded in 2010, Hiking Gear Shop was born out of a passion for outdoor adventures and a desire to provide high-quality equipment to fellow enthusiasts. What started as a small shop in the mountains of Colorado has grown into a trusted online retailer serving outdoor adventurers across the country.</p>
+            
+            <p>Our mission is simple: to provide reliable, durable, and innovative hiking gear that enhances your outdoor experience. We believe that everyone should have access to quality equipment that keeps them safe and comfortable while exploring the beauty of nature.</p>
+            
+            <p>At Hiking Gear Shop, we carefully select each product in our inventory, testing them in real-world conditions to ensure they meet our high standards. We're hikers, climbers, and campers ourselves, so we understand the importance of having gear you can trust when you're miles from civilization.</p>
+        </section>
+        
+        <section class="team-section">
+            <div class="container">
+                <h2>Meet Our Team</h2>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <img src="images/team-member1.jpg" alt="Team Member">
+                        <div class="team-info">
+                            <h3>Emily Harrison</h3>
+                            <p>Founder & CEO</p>
+                            <p>Former park ranger with over 15 years of hiking experience across 6 continents.</p>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <img src="images/team-member2.jpg" alt="Team Member">
+                        <div class="team-info">
+                            <h3>Michael Torres</h3>
+                            <p>Gear Specialist</p>
+                            <p>Certified mountaineering instructor who has summited over 50 peaks above 14,000 ft.</p>
+                        </div>
+                    </div>
+                    <div class="team-member">
+                        <img src="images/team-member3.jpg" alt="Team Member">
+                        <div class="team-info">
+                            <h3>Sarah Chen</h3>
+                            <p>Customer Experience</p>
+                            <p>Thru-hiker who completed the Pacific Crest Trail and Appalachian Trail.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        
+        <section class="container values-section">
+            <h2>Our Values</h2>
+            <div class="values-grid">
+                <div class="value-card">
+                    <i>🌲</i>
+                    <h3>Environmental Stewardship</h3>
+                    <p>We're committed to minimizing our environmental impact and supporting conservation efforts.</p>
+                </div>
+                <div class="value-card">
+                    <i>🔍</i>
+                    <h3>Quality First</h3>
+                    <p>We never compromise on quality, selecting only the best gear for our customers.</p>
+                </div>
+                <div class="value-card">
+                    <i>🤝</i>
+                    <h3>Community</h3>
+                    <p>We believe in fostering a community of outdoor enthusiasts who share knowledge and passion.</p>
+                </div>
+            </div>
+        </section>
+    </main>
+
+
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Your Cart</h2>
+                <button onclick="closeCart()" class="close-btn">&times;</button>
+            </div>
+            <div id="cart-items">
+               
+            </div>
+            <div class="cart-summary">
+                <div class="total">
+                    <span>Total:</span>
+                    <span id="cart-total">$0</span>
+                </div>
+                <button onclick="proceedToCheckout()" class="checkout-btn">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2025 Hiking Gear Shop. All rights reserved.</p>
+    </footer>
+
+    <script src="js/script.js"></script>
+</body>
+</html>

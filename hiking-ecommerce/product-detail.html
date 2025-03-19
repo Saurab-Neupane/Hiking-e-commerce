@@ -1,0 +1,560 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Product Detail - Hiking Gear Shop</title>
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .product-detail-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem 1rem;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 2rem;
+        }
+        
+        @media (max-width: 768px) {
+            .product-detail-container {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        .product-images {
+            position: relative;
+        }
+        
+        .main-image {
+            width: 100%;
+            height: auto;
+            object-fit: cover;
+            border-radius: 8px;
+            margin-bottom: 15px;
+        }
+        .thumbnail-container {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+        }
+
+        .thumbnail {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: opacity 0.3s;
+            border: 2px solid transparent;
+        }
+
+        .thumbnail:hover, .thumbnail.active {
+            opacity: 1;
+            border-color: #3498db;
+        }
+
+        .product-info h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .product-brand {
+            color: #777;
+            margin-bottom: 15px;
+        }
+
+        .product-price {
+            font-size: 1.5rem;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #e74c3c;
+        }
+
+        .rating {
+            color: #f39c12;
+            margin-bottom: 15px;
+        }
+
+        .product-description {
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .color-options {
+            margin-bottom: 20px;
+        }
+
+        .color-option {
+            display: inline-block;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            margin-right: 10px;
+            cursor: pointer;
+            border: 2px solid #ddd;
+        }
+
+        .color-option.active {
+            border-color: #3498db;
+            box-shadow: 0 0 0 2px white, 0 0 0 4px #3498db;
+        }
+
+        .product-actions {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .add-to-cart {
+            padding: 12px 25px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .add-to-cart:hover {
+            background-color: #2980b9;
+        }
+
+        .add-to-wishlist {
+            padding: 12px 15px;
+            background-color: #f8f9fa;
+            color: #333;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s;
+        }
+
+        .add-to-wishlist:hover {
+            background-color: #e9ecef;
+        }
+
+        .product-tabs {
+            margin-top: 40px;
+            grid-column: 1 / -1;
+        }
+
+        .tabs-nav {
+            display: flex;
+            border-bottom: 1px solid #ddd;
+            margin-bottom: 20px;
+        }
+
+        .tab {
+            padding: 10px 20px;
+            cursor: pointer;
+            margin-right: 5px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            border-radius: 5px 5px 0 0;
+            position: relative;
+            top: 1px;
+        }
+
+        .tab.active {
+            background-color: white;
+            border-bottom: 1px solid white;
+        }
+
+        .tab-content {
+            display: none;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-top: none;
+            border-radius: 0 0 5px 5px;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .specs-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .specs-table th, .specs-table td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .specs-table th {
+            width: 30%;
+            background-color: #f8f9fa;
+        }
+
+        .review {
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .review-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+        }
+
+        .review-author {
+            font-weight: bold;
+        }
+
+        .review-date {
+            color: #777;
+        }
+
+        .quantity-selector {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .quantity-selector button {
+            width: 30px;
+            height: 30px;
+            background-color: #f8f9fa;
+            border: 1px solid #ddd;
+            cursor: pointer;
+        }
+
+        .quantity-selector input {
+            width: 50px;
+            height: 30px;
+            text-align: center;
+            border: 1px solid #ddd;
+            margin: 0 5px;
+        }
+
+        @media (max-width: 768px) {
+            .product-detail-container {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="logo">
+            <h1>Hiking Gear Shop</h1>
+        </div>
+        <nav>
+            <ul>
+                <li><a href="index.html">Home</a></li>
+                <li><a href="products.html">Products</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </nav>
+        <div class="cart-icon">
+            <button id="cart-button">🛒</button>
+            <span id="cart-counter">0</span>
+        </div>
+    </header>
+
+    <main>
+        <div class="product-detail-container" id="product-detail">
+            <!-- Content will be populated by JavaScript -->
+        </div>
+    </main>
+
+    <!-- Cart Modal -->
+    <div id="cart-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Your Cart</h2>
+                <button onclick="closeCart()" class="close-btn">&times;</button>
+            </div>
+            <div id="cart-items">
+                <!-- Cart items will be populated here -->
+            </div>
+            <div class="cart-summary">
+                <div class="total">
+                    <span>Total:</span>
+                    <span id="cart-total">$0</span>
+                </div>
+                <button onclick="proceedToCheckout()" class="checkout-btn">Proceed to Checkout</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Hiking Gear Shop. All rights reserved.</p>
+    </footer>
+
+    <script src="js/products.js"></script>
+    <script src="js/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Get product ID from URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const productId = parseInt(urlParams.get('id'));
+            
+            if (!productId) {
+                window.location.href = 'products.html';
+                return;
+            }
+            
+            // Find product in products array
+            const product = products.find(p => p.id === productId);
+            
+            if (!product) {
+                window.location.href = 'products.html';
+                return;
+            }
+            
+            // Set page title
+            document.title = `${product.name} - Hiking Gear Shop`;
+            
+            // Generate product images (fake multiple images for demo)
+            const productImages = [
+                product.image,
+                product.image.replace('.jpg', '-2.jpg'),
+                product.image.replace('.jpg', '-3.jpg'),
+                product.image.replace('.jpg', '-4.jpg')
+            ];
+            
+            // Generate random color options
+            const colorOptions = [
+                { name: 'Black', hex: '#000000' },
+                { name: 'Blue', hex: '#3498db' },
+                { name: 'Green', hex: '#2ecc71' },
+                { name: 'Red', hex: '#e74c3c' },
+                { name: 'Gray', hex: '#95a5a6' }
+            ];
+            
+            // Generate mock reviews
+            const reviews = [
+                {
+                    author: 'John D.',
+                    date: '2023-10-15',
+                    rating: 5,
+                    content: 'Excellent product! Exactly what I needed for my hiking trip.'
+                },
+                {
+                    author: 'Sarah M.',
+                    date: '2023-09-22',
+                    rating: 4,
+                    content: 'Good quality and comfortable. Just a bit pricey.'
+                },
+                {
+                    author: 'Michael K.',
+                    date: '2023-08-30',
+                    rating: 5,
+                    content: 'Durable and well-made. Has already survived multiple trips!'
+                }
+            ];
+            
+            // Calculate average rating
+            const avgRating = reviews.reduce((sum, review) => sum + review.rating, 0) / reviews.length;
+            
+            // Render product detail HTML
+            const productDetailContainer = document.getElementById('product-detail');
+            productDetailContainer.innerHTML = `
+                <div class="product-gallery">
+                    <img src="${productImages[0]}" alt="${product.name}" class="main-image" id="main-product-image">
+                    <div class="thumbnail-container">
+                        ${productImages.map((img, index) => `
+                            <img src="${img}" alt="${product.name} view ${index+1}" class="thumbnail ${index === 0 ? 'active' : ''}" onclick="changeMainImage('${img}', this)">
+                        `).join('')}
+                    </div>
+                </div>
+                <div class="product-info">
+                    <h1>${product.name}</h1>
+                    <p class="product-brand">by Hiking Gear Shop</p>
+                    <div class="rating">
+                        ${generateStarRating(avgRating)}
+                        <span>(${reviews.length} reviews)</span>
+                    </div>
+                    <p class="product-price">$${product.price}</p>
+                    <div class="product-description">
+                        <p>${product.description || 'No description available.'}</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Sed euismod, nisl eget ultricies ultrices, nisl nisl aliquam nisl, eget aliquam nisl nisl eget nisl.</p>
+                    </div>
+                    
+                    <div class="color-options">
+                        <h3>Color Options:</h3>
+                        ${colorOptions.map((color, index) => `
+                            <div class="color-option ${index === 0 ? 'active' : ''}" 
+                                 style="background-color: ${color.hex};" 
+                                 title="${color.name}"
+                                 onclick="selectColor(this, '${color.name}')"></div>
+                        `).join('')}
+                        <p id="selected-color">Selected: ${colorOptions[0].name}</p>
+                    </div>
+                    
+                    <div class="quantity-selector">
+                        <button onclick="decrementQuantity()">-</button>
+                        <input type="number" id="quantity" value="1" min="1" max="10">
+                        <button onclick="incrementQuantity()">+</button>
+                    </div>
+                    
+                    <div class="product-actions">
+                        <button class="add-to-cart" onclick="addToCartFromDetail(${product.id})">Add to Cart</button>
+                        <button class="add-to-wishlist" onclick="addToWishlist(${product.id})">❤ Add to Wishlist</button>
+                    </div>
+                </div>
+                
+                <div class="product-tabs">
+                    <div class="tabs-nav">
+                        <div class="tab active" onclick="switchTab('description', this)">Description</div>
+                        <div class="tab" onclick="switchTab('specifications', this)">Specifications</div>
+                        <div class="tab" onclick="switchTab('reviews', this)">Reviews (${reviews.length})</div>
+                    </div>
+                    <div id="description" class="tab-content active">
+                        <h3>Product Description</h3>
+                        <p>${product.description || 'No description available.'}</p>
+                        <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla facilisi. Sed euismod, nisl eget ultricies ultrices, nisl nisl aliquam nisl, eget aliquam nisl nisl eget nisl. Nulla facilisi. Sed euismod, nisl eget ultricies ultrices, nisl nisl aliquam nisl, eget aliquam nisl nisl eget nisl.</p>
+                        <p>Key Features:</p>
+                        <ul>
+                            <li>High-quality materials for durability</li>
+                            <li>Comfortable design for long hikes</li>
+                            <li>Weather-resistant construction</li>
+                            <li>Lightweight for easy carrying</li>
+                            <li>Versatile for various terrains</li>
+                        </ul>
+                    </div>
+                    <div id="specifications" class="tab-content">
+                        <h3>Technical Specifications</h3>
+                        <table class="specs-table">
+                            <tr>
+                                <th>Material</th>
+                                <td>Premium synthetic blend</td>
+                            </tr>
+                            <tr>
+                                <th>Weight</th>
+                                <td>1.2 kg</td>
+                            </tr>
+                            <tr>
+                                <th>Dimensions</th>
+                                <td>30 × 20 × 15 cm</td>
+                            </tr>
+                            <tr>
+                                <th>Color Options</th>
+                                <td>${colorOptions.map(c => c.name).join(', ')}</td>
+                            </tr>
+                            <tr>
+                                <th>Water Resistant</th>
+                                <td>Yes</td>
+                            </tr>
+                            <tr>
+                                <th>Warranty</th>
+                                <td>1 year</td>
+                            </tr>
+                        </table>
+                    </div>
+                    <div id="reviews" class="tab-content">
+                        <h3>Customer Reviews</h3>
+                        <div class="reviews-container">
+                            ${reviews.map(review => `
+                                <div class="review">
+                                    <div class="review-header">
+                                        <span class="review-author">${review.author}</span>
+                                        <span class="review-date">${review.date}</span>
+                                    </div>
+                                    <div class="rating">${generateStarRating(review.rating)}</div>
+                                    <p>${review.content}</p>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                </div>
+            `;
+        });
+        
+        // Helper function to generate star rating HTML
+        function generateStarRating(rating) {
+            let stars = '';
+            for (let i = 1; i <= 5; i++) {
+                if (i <= rating) {
+                    stars += '★'; // Full star
+                } else if (i - 0.5 <= rating) {
+                    stars += '⯨'; // Half star (approx)
+                } else {
+                    stars += '☆'; // Empty star
+                }
+            }
+            return stars;
+        }
+        
+        // Function to change main product image when thumbnail is clicked
+        function changeMainImage(imageSrc, thumbnail) {
+            document.getElementById('main-product-image').src = imageSrc;
+            
+            // Update active thumbnail
+            document.querySelectorAll('.thumbnail').forEach(thumb => {
+                thumb.classList.remove('active');
+            });
+            thumbnail.classList.add('active');
+        }
+        
+        // Function to switch between tabs
+        function switchTab(tabId, tabElement) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Show selected tab content
+            document.getElementById(tabId).classList.add('active');
+            
+            // Update active tab
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            tabElement.classList.add('active');
+        }
+        
+        // Function to select color option
+        function selectColor(colorElement, colorName) {
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.classList.remove('active');
+            });
+            colorElement.classList.add('active');
+            document.getElementById('selected-color').textContent = `Selected: ${colorName}`;
+        }
+        
+        // Function to handle quantity increment
+        function incrementQuantity() {
+            const quantityInput = document.getElementById('quantity');
+            const currentValue = parseInt(quantityInput.value);
+            if (currentValue < parseInt(quantityInput.max)) {
+                quantityInput.value = currentValue + 1;
+            }
+        }
+        
+        // Function to handle quantity decrement
+        function decrementQuantity() {
+            const quantityInput = document.getElementById('quantity');
+            const currentValue = parseInt(quantityInput.value);
+            if (currentValue > parseInt(quantityInput.min)) {
+                quantityInput.value = currentValue - 1;
+            }
+        }
+        
+        // Function to add product to cart from detail page
+        function addToCartFromDetail(productId) {
+            const quantity = parseInt(document.getElementById('quantity').value);
+            const product = products.find(p => p.id === productId);
+            
+            if (product) {
+                // Add to cart multiple times based on quantity
+                for (let i = 0; i < quantity; i++) {
+                    addToCart(productId);
+                }
+                
+                // Show notification
+                showNotification(`${quantity} × ${product.name} added to cart!`, 'success');
+            }
+        }
+    </script>
+</body>
+</html>
